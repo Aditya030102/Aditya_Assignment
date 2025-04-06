@@ -1,0 +1,66 @@
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { motion } from "framer-motion";
+
+const buttons = ["Primary", "Secondary", "Success", "Danger"];
+const filters = ["All", "Category A", "Category B"];
+const cards = [
+  { title: "Item 1", category: "Category A" },
+  { title: "Item 2", category: "Category B" },
+  { title: "Item 3", category: "Category A" },
+  { title: "Item 4", category: "Category B" },
+];
+
+export default function HomePage() {
+  const [selectedFilter, setSelectedFilter] = React.useState("All");
+
+  const filteredCards = selectedFilter === "All"
+    ? cards
+    : cards.filter(card => card.category === selectedFilter);
+
+  return (
+    <div className="min-h-screen bg-cover bg-center p-6" style={{ backgroundImage: 'url(https://source.unsplash.com/random/1600x900)' }}>
+      <div className="max-w-4xl mx-auto space-y-6">
+        <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-bold text-white text-center">
+          Button & Filter Showcase
+        </motion.h1>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {buttons.map((label, i) => (
+            <Button key={i} className="text-white w-full">
+              {label}
+            </Button>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Input placeholder="Search..." className="w-full sm:w-1/2" />
+          <Select onValueChange={setSelectedFilter} defaultValue="All">
+            <SelectTrigger className="w-full sm:w-1/2">
+              <SelectValue placeholder="Filter by Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {filters.map((filter, i) => (
+                <SelectItem value={filter} key={i}>{filter}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {filteredCards.map((card, i) => (
+            <Card key={i} className="bg-white bg-opacity-90">
+              <CardContent className="p-4">
+                <h2 className="text-xl font-semibold">{card.title}</h2>
+                <p className="text-sm text-gray-600">{card.category}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
